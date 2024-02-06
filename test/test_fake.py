@@ -4,7 +4,7 @@ import random
 
 import pytest
 
-import orjson
+import xorjson
 
 try:
     from faker import Faker
@@ -46,5 +46,5 @@ class TestFaker:
             ]
             for _ in range(0, NUM_SHUFFLES):
                 random.shuffle(data)
-                output = orjson.dumps(data)
-                assert orjson.loads(output) == data
+                output = xorjson.dumps(data)
+                assert xorjson.loads(output) == data

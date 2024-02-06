@@ -1,11 +1,11 @@
-import orjson
+import xorjson
 
 
 class C:
     c: "C"
 
     def __del__(self):
-        orjson.loads('"' + "a" * 10000 + '"')
+        xorjson.loads('"' + "a" * 10000 + '"')
 
 
 def test_reentrant():
@@ -13,4 +13,4 @@ def test_reentrant():
     c.c = c
     del c
 
-    orjson.loads("[" + "[]," * 1000 + "[]]")
+    xorjson.loads("[" + "[]," * 1000 + "[]]")

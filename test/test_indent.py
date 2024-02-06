@@ -3,7 +3,7 @@
 import datetime
 import json
 
-import orjson
+import xorjson
 
 from .util import read_fixture_obj
 
@@ -14,21 +14,21 @@ class TestIndentedOutput:
         OPT_INDENT_2 is equivalent to indent=2
         """
         obj = {"a": "b", "c": {"d": True}, "e": [1, 2]}
-        assert orjson.dumps(obj, option=orjson.OPT_INDENT_2) == json.dumps(
+        assert xorjson.dumps(obj, option=xorjson.OPT_INDENT_2) == json.dumps(
             obj, indent=2
         ).encode("utf-8")
 
     def test_sort(self):
         obj = {"b": 1, "a": 2}
         assert (
-            orjson.dumps(obj, option=orjson.OPT_INDENT_2 | orjson.OPT_SORT_KEYS)
+            xorjson.dumps(obj, option=xorjson.OPT_INDENT_2 | xorjson.OPT_SORT_KEYS)
             == b'{\n  "a": 2,\n  "b": 1\n}'
         )
 
     def test_non_str(self):
         obj = {1: 1, "a": 2}
         assert (
-            orjson.dumps(obj, option=orjson.OPT_INDENT_2 | orjson.OPT_NON_STR_KEYS)
+            xorjson.dumps(obj, option=xorjson.OPT_INDENT_2 | xorjson.OPT_NON_STR_KEYS)
             == b'{\n  "1": 1,\n  "a": 2\n}'
         )
 
@@ -39,12 +39,12 @@ class TestIndentedOutput:
             "a": datetime.datetime(1970, 1, 1),
         }
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 obj,
-                option=orjson.OPT_INDENT_2
-                | orjson.OPT_SORT_KEYS
-                | orjson.OPT_NON_STR_KEYS
-                | orjson.OPT_NAIVE_UTC,
+                option=xorjson.OPT_INDENT_2
+                | xorjson.OPT_SORT_KEYS
+                | xorjson.OPT_NON_STR_KEYS
+                | xorjson.OPT_NAIVE_UTC,
             )
             == b'{\n  "1": 1,\n  "a": "1970-01-01T00:00:00+00:00",\n  "b": true\n}'
         )
@@ -52,14 +52,14 @@ class TestIndentedOutput:
     def test_empty(self):
         obj = [{}, [[[]]], {"key": []}]
         ref = b'[\n  {},\n  [\n    [\n      []\n    ]\n  ],\n  {\n    "key": []\n  }\n]'
-        assert orjson.dumps(obj, option=orjson.OPT_INDENT_2) == ref
+        assert xorjson.dumps(obj, option=xorjson.OPT_INDENT_2) == ref
 
     def test_twitter_pretty(self):
         """
         twitter.json pretty
         """
         obj = read_fixture_obj("twitter.json.xz")
-        assert orjson.dumps(obj, option=orjson.OPT_INDENT_2) == json.dumps(
+        assert xorjson.dumps(obj, option=xorjson.OPT_INDENT_2) == json.dumps(
             obj, indent=2, ensure_ascii=False
         ).encode("utf-8")
 
@@ -68,7 +68,7 @@ class TestIndentedOutput:
         github.json pretty
         """
         obj = read_fixture_obj("github.json.xz")
-        assert orjson.dumps(obj, option=orjson.OPT_INDENT_2) == json.dumps(
+        assert xorjson.dumps(obj, option=xorjson.OPT_INDENT_2) == json.dumps(
             obj, indent=2, ensure_ascii=False
         ).encode("utf-8")
 
@@ -77,7 +77,7 @@ class TestIndentedOutput:
         canada.json pretty
         """
         obj = read_fixture_obj("canada.json.xz")
-        assert orjson.dumps(obj, option=orjson.OPT_INDENT_2) == json.dumps(
+        assert xorjson.dumps(obj, option=xorjson.OPT_INDENT_2) == json.dumps(
             obj, indent=2, ensure_ascii=False
         ).encode("utf-8")
 
@@ -86,6 +86,6 @@ class TestIndentedOutput:
         citm_catalog.json pretty
         """
         obj = read_fixture_obj("citm_catalog.json.xz")
-        assert orjson.dumps(obj, option=orjson.OPT_INDENT_2) == json.dumps(
+        assert xorjson.dumps(obj, option=xorjson.OPT_INDENT_2) == json.dumps(
             obj, indent=2, ensure_ascii=False
         ).encode("utf-8")

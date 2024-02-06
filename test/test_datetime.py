@@ -4,7 +4,7 @@ import datetime
 
 import pytest
 
-import orjson
+import xorjson
 
 try:
     import zoneinfo
@@ -46,7 +46,7 @@ class TestDatetime:
         datetime.datetime naive prints without offset
         """
         assert (
-            orjson.dumps([datetime.datetime(2000, 1, 1, 2, 3, 4, 123)])
+            xorjson.dumps([datetime.datetime(2000, 1, 1, 2, 3, 4, 123)])
             == b'["2000-01-01T02:03:04.000123"]'
         )
 
@@ -55,9 +55,9 @@ class TestDatetime:
         datetime.datetime naive with opt assumes UTC
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(2000, 1, 1, 2, 3, 4, 123)],
-                option=orjson.OPT_NAIVE_UTC,
+                option=xorjson.OPT_NAIVE_UTC,
             )
             == b'["2000-01-01T02:03:04.000123+00:00"]'
         )
@@ -67,9 +67,9 @@ class TestDatetime:
         datetime.datetime min range
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(datetime.MINYEAR, 1, 1, 0, 0, 0, 0)],
-                option=orjson.OPT_NAIVE_UTC,
+                option=xorjson.OPT_NAIVE_UTC,
             )
             == b'["0001-01-01T00:00:00+00:00"]'
         )
@@ -79,9 +79,9 @@ class TestDatetime:
         datetime.datetime max range
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(datetime.MAXYEAR, 12, 31, 23, 59, 50, 999999)],
-                option=orjson.OPT_NAIVE_UTC,
+                option=xorjson.OPT_NAIVE_UTC,
             )
             == b'["9999-12-31T23:59:50.999999+00:00"]'
         )
@@ -91,9 +91,9 @@ class TestDatetime:
         datetime.datetime three digit year
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(312, 1, 1)],
-                option=orjson.OPT_NAIVE_UTC,
+                option=xorjson.OPT_NAIVE_UTC,
             )
             == b'["0312-01-01T00:00:00+00:00"]'
         )
@@ -103,9 +103,9 @@ class TestDatetime:
         datetime.datetime two digit year
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(46, 1, 1)],
-                option=orjson.OPT_NAIVE_UTC,
+                option=xorjson.OPT_NAIVE_UTC,
             )
             == b'["0046-01-01T00:00:00+00:00"]'
         )
@@ -116,13 +116,13 @@ class TestDatetime:
         datetime.datetime tz with assume UTC uses tz
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018, 1, 1, 2, 3, 4, 0, tzinfo=tz.gettz("Asia/Shanghai")
                     )
                 ],
-                option=orjson.OPT_NAIVE_UTC,
+                option=xorjson.OPT_NAIVE_UTC,
             )
             == b'["2018-01-01T02:03:04+08:00"]'
         )
@@ -132,7 +132,7 @@ class TestDatetime:
         datetime.datetime.utc
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018, 6, 1, 2, 3, 4, 0, tzinfo=datetime.timezone.utc
@@ -148,7 +148,7 @@ class TestDatetime:
         pytz.UTC
         """
         assert (
-            orjson.dumps([datetime.datetime(2018, 6, 1, 2, 3, 4, 0, tzinfo=pytz.UTC)])
+            xorjson.dumps([datetime.datetime(2018, 6, 1, 2, 3, 4, 0, tzinfo=pytz.UTC)])
             == b'["2018-06-01T02:03:04+00:00"]'
         )
 
@@ -158,7 +158,7 @@ class TestDatetime:
         zoneinfo.ZoneInfo("UTC")
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018, 6, 1, 2, 3, 4, 0, tzinfo=zoneinfo.ZoneInfo("UTC")
@@ -171,7 +171,7 @@ class TestDatetime:
     @pytest.mark.skipif(zoneinfo is None, reason="zoneinfo not available")
     def test_datetime_zoneinfo_positive(self):
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -191,7 +191,7 @@ class TestDatetime:
     @pytest.mark.skipif(zoneinfo is None, reason="zoneinfo not available")
     def test_datetime_zoneinfo_negative(self):
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -214,7 +214,7 @@ class TestDatetime:
         datetime.datetime UTC
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(2018, 6, 1, 2, 3, 4, 0, tzinfo=pendulum.UTC)]
             )
             == b'["2018-06-01T02:03:04+00:00"]'
@@ -226,7 +226,7 @@ class TestDatetime:
         datetime.datetime positive UTC
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018, 1, 1, 2, 3, 4, 0, tzinfo=tz.gettz("Asia/Shanghai")
@@ -242,7 +242,7 @@ class TestDatetime:
         datetime.datetime positive UTC
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018, 1, 1, 2, 3, 4, 0, tzinfo=pytz.timezone("Asia/Shanghai")
@@ -258,7 +258,7 @@ class TestDatetime:
         datetime.datetime positive UTC
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -281,7 +281,7 @@ class TestDatetime:
         datetime.datetime negative UTC DST
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018, 6, 1, 2, 3, 4, 0, tzinfo=pytz.timezone("America/New_York")
@@ -297,7 +297,7 @@ class TestDatetime:
         datetime.datetime negative UTC DST
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -320,7 +320,7 @@ class TestDatetime:
         datetime.datetime negative UTC non-DST
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -343,7 +343,7 @@ class TestDatetime:
         datetime.datetime negative UTC non-DST
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -366,7 +366,7 @@ class TestDatetime:
         datetime.datetime negative UTC non-DST
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -389,7 +389,7 @@ class TestDatetime:
         datetime.datetime UTC offset partial hour
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -412,7 +412,7 @@ class TestDatetime:
         datetime.datetime UTC offset partial hour
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -435,7 +435,7 @@ class TestDatetime:
         datetime.datetime UTC offset partial hour
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2018,
@@ -460,7 +460,7 @@ class TestDatetime:
         https://tools.ietf.org/html/rfc3339#section-5.8
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         1937,
@@ -485,7 +485,7 @@ class TestDatetime:
         https://tools.ietf.org/html/rfc3339#section-5.8
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         1937,
@@ -510,7 +510,7 @@ class TestDatetime:
         https://tools.ietf.org/html/rfc3339#section-5.8
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         1937,
@@ -535,7 +535,7 @@ class TestDatetime:
         https://tools.ietf.org/html/rfc3339#section-5.8
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         1937, 1, 1, 12, 0, 27, 87, tzinfo=tz.gettz("Europe/Amsterdam")
@@ -550,7 +550,7 @@ class TestDatetime:
         datetime.datetime microsecond max
         """
         assert (
-            orjson.dumps(datetime.datetime(2000, 1, 1, 0, 0, 0, 999999))
+            xorjson.dumps(datetime.datetime(2000, 1, 1, 0, 0, 0, 999999))
             == b'"2000-01-01T00:00:00.999999"'
         )
 
@@ -559,7 +559,7 @@ class TestDatetime:
         datetime.datetime microsecond min
         """
         assert (
-            orjson.dumps(datetime.datetime(2000, 1, 1, 0, 0, 0, 1))
+            xorjson.dumps(datetime.datetime(2000, 1, 1, 0, 0, 0, 1))
             == b'"2000-01-01T00:00:00.000001"'
         )
 
@@ -568,9 +568,9 @@ class TestDatetime:
         datetime.datetime OPT_OMIT_MICROSECONDS
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(2000, 1, 1, 2, 3, 4, 123)],
-                option=orjson.OPT_OMIT_MICROSECONDS,
+                option=xorjson.OPT_OMIT_MICROSECONDS,
             )
             == b'["2000-01-01T02:03:04"]'
         )
@@ -580,9 +580,9 @@ class TestDatetime:
         datetime.datetime naive OPT_OMIT_MICROSECONDS
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(2000, 1, 1, 2, 3, 4, 123)],
-                option=orjson.OPT_NAIVE_UTC | orjson.OPT_OMIT_MICROSECONDS,
+                option=xorjson.OPT_NAIVE_UTC | xorjson.OPT_OMIT_MICROSECONDS,
             )
             == b'["2000-01-01T02:03:04+00:00"]'
         )
@@ -592,8 +592,8 @@ class TestDatetime:
         datetime.time OPT_OMIT_MICROSECONDS
         """
         assert (
-            orjson.dumps(
-                [datetime.time(2, 3, 4, 123)], option=orjson.OPT_OMIT_MICROSECONDS
+            xorjson.dumps(
+                [datetime.time(2, 3, 4, 123)], option=xorjson.OPT_OMIT_MICROSECONDS
             )
             == b'["02:03:04"]'
         )
@@ -603,11 +603,11 @@ class TestDatetime:
         datetime.datetime naive OPT_UTC_Z
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(2000, 1, 1, 2, 3, 4, 123)],
-                option=orjson.OPT_NAIVE_UTC
-                | orjson.OPT_UTC_Z
-                | orjson.OPT_OMIT_MICROSECONDS,
+                option=xorjson.OPT_NAIVE_UTC
+                | xorjson.OPT_UTC_Z
+                | xorjson.OPT_OMIT_MICROSECONDS,
             )
             == b'["2000-01-01T02:03:04Z"]'
         )
@@ -617,9 +617,9 @@ class TestDatetime:
         datetime.datetime naive OPT_UTC_Z
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.datetime(2000, 1, 1, 2, 3, 4, 123)],
-                option=orjson.OPT_NAIVE_UTC | orjson.OPT_UTC_Z,
+                option=xorjson.OPT_NAIVE_UTC | xorjson.OPT_UTC_Z,
             )
             == b'["2000-01-01T02:03:04.000123Z"]'
         )
@@ -629,8 +629,8 @@ class TestDatetime:
         datetime.datetime naive OPT_UTC_Z
         """
         assert (
-            orjson.dumps(
-                [datetime.datetime(2000, 1, 1, 2, 3, 4, 123)], option=orjson.OPT_UTC_Z
+            xorjson.dumps(
+                [datetime.datetime(2000, 1, 1, 2, 3, 4, 123)], option=xorjson.OPT_UTC_Z
             )
             == b'["2000-01-01T02:03:04.000123"]'
         )
@@ -641,24 +641,24 @@ class TestDatetime:
         datetime.datetime naive OPT_UTC_Z
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         2000, 1, 1, 0, 0, 0, 1, tzinfo=datetime.timezone.utc
                     )
                 ],
-                option=orjson.OPT_UTC_Z,
+                option=xorjson.OPT_UTC_Z,
             )
             == b'["2000-01-01T00:00:00.000001Z"]'
         )
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [
                     datetime.datetime(
                         1937, 1, 1, 12, 0, 27, 87, tzinfo=tz.gettz("Europe/Amsterdam")
                     )
                 ],
-                option=orjson.OPT_UTC_Z,
+                option=xorjson.OPT_UTC_Z,
             )
             in AMSTERDAM_1937_DATETIMES_WITH_Z
         )
@@ -669,7 +669,7 @@ class TestDatetime:
         datetime.datetime parsed by pendulum
         """
         obj = datetime.datetime(2000, 1, 1, 0, 0, 0, 1, tzinfo=datetime.timezone.utc)
-        serialized = orjson.dumps(obj).decode("utf-8").replace('"', "")
+        serialized = xorjson.dumps(obj).decode("utf-8").replace('"', "")
         parsed = pendulum.parse(serialized)
         for attr in ("year", "month", "day", "hour", "minute", "second", "microsecond"):
             assert getattr(obj, attr) == getattr(parsed, attr)
@@ -680,14 +680,14 @@ class TestDate:
         """
         datetime.date
         """
-        assert orjson.dumps([datetime.date(2000, 1, 13)]) == b'["2000-01-13"]'
+        assert xorjson.dumps([datetime.date(2000, 1, 13)]) == b'["2000-01-13"]'
 
     def test_date_min(self):
         """
         datetime.date MINYEAR
         """
         assert (
-            orjson.dumps([datetime.date(datetime.MINYEAR, 1, 1)]) == b'["0001-01-01"]'
+            xorjson.dumps([datetime.date(datetime.MINYEAR, 1, 1)]) == b'["0001-01-01"]'
         )
 
     def test_date_max(self):
@@ -695,7 +695,7 @@ class TestDate:
         datetime.date MAXYEAR
         """
         assert (
-            orjson.dumps([datetime.date(datetime.MAXYEAR, 12, 31)]) == b'["9999-12-31"]'
+            xorjson.dumps([datetime.date(datetime.MAXYEAR, 12, 31)]) == b'["9999-12-31"]'
         )
 
     def test_date_three_digits(self):
@@ -703,7 +703,7 @@ class TestDate:
         datetime.date three digit year
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.date(312, 1, 1)],
             )
             == b'["0312-01-01"]'
@@ -714,7 +714,7 @@ class TestDate:
         datetime.date two digit year
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [datetime.date(46, 1, 1)],
             )
             == b'["0046-01-01"]'
@@ -726,16 +726,16 @@ class TestTime:
         """
         datetime.time
         """
-        assert orjson.dumps([datetime.time(12, 15, 59, 111)]) == b'["12:15:59.000111"]'
-        assert orjson.dumps([datetime.time(12, 15, 59)]) == b'["12:15:59"]'
+        assert xorjson.dumps([datetime.time(12, 15, 59, 111)]) == b'["12:15:59.000111"]'
+        assert xorjson.dumps([datetime.time(12, 15, 59)]) == b'["12:15:59"]'
 
     @pytest.mark.skipif(zoneinfo is None, reason="zoneinfo not available")
     def test_time_tz(self):
         """
         datetime.time with tzinfo error
         """
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(
                 [
                     datetime.time(
                         12, 15, 59, 111, tzinfo=zoneinfo.ZoneInfo("Asia/Shanghai")
@@ -747,32 +747,32 @@ class TestTime:
         """
         datetime.time microsecond max
         """
-        assert orjson.dumps(datetime.time(0, 0, 0, 999999)) == b'"00:00:00.999999"'
+        assert xorjson.dumps(datetime.time(0, 0, 0, 999999)) == b'"00:00:00.999999"'
 
     def test_time_microsecond_min(self):
         """
         datetime.time microsecond min
         """
-        assert orjson.dumps(datetime.time(0, 0, 0, 1)) == b'"00:00:00.000001"'
+        assert xorjson.dumps(datetime.time(0, 0, 0, 1)) == b'"00:00:00.000001"'
 
 
 class TestDateclassPassthrough:
     def test_passthrough_datetime(self):
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(
-                datetime.datetime(1970, 1, 1), option=orjson.OPT_PASSTHROUGH_DATETIME
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(
+                datetime.datetime(1970, 1, 1), option=xorjson.OPT_PASSTHROUGH_DATETIME
             )
 
     def test_passthrough_date(self):
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(
-                datetime.date(1970, 1, 1), option=orjson.OPT_PASSTHROUGH_DATETIME
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(
+                datetime.date(1970, 1, 1), option=xorjson.OPT_PASSTHROUGH_DATETIME
             )
 
     def test_passthrough_time(self):
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(
-                datetime.time(12, 0, 0), option=orjson.OPT_PASSTHROUGH_DATETIME
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(
+                datetime.time(12, 0, 0), option=xorjson.OPT_PASSTHROUGH_DATETIME
             )
 
     def test_passthrough_datetime_default(self):
@@ -780,9 +780,9 @@ class TestDateclassPassthrough:
             return obj.strftime("%a, %d %b %Y %H:%M:%S GMT")
 
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 datetime.datetime(1970, 1, 1),
-                option=orjson.OPT_PASSTHROUGH_DATETIME,
+                option=xorjson.OPT_PASSTHROUGH_DATETIME,
                 default=default,
             )
             == b'"Thu, 01 Jan 1970 00:00:00 GMT"'

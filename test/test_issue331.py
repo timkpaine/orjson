@@ -2,7 +2,7 @@
 
 import datetime
 
-import orjson
+import xorjson
 
 from .util import read_fixture_bytes
 
@@ -255,37 +255,37 @@ FIXTURE_ISSUE_335 = {
 
 def test_issue331_1_pretty():
     as_bytes = read_fixture_bytes("issue331_1.json.xz")
-    as_obj = orjson.loads(as_bytes)
+    as_obj = xorjson.loads(as_bytes)
     for _ in range(1000):
-        assert orjson.loads(orjson.dumps(as_obj, option=orjson.OPT_INDENT_2)) == as_obj
+        assert xorjson.loads(xorjson.dumps(as_obj, option=xorjson.OPT_INDENT_2)) == as_obj
 
 
 def test_issue331_1_compact():
     as_bytes = read_fixture_bytes("issue331_1.json.xz")
-    as_obj = orjson.loads(as_bytes)
+    as_obj = xorjson.loads(as_bytes)
     for _ in range(1000):
-        assert orjson.loads(orjson.dumps(as_obj)) == as_obj
+        assert xorjson.loads(xorjson.dumps(as_obj)) == as_obj
 
 
 def test_issue331_2_pretty():
     as_bytes = read_fixture_bytes("issue331_2.json.xz")
-    as_obj = orjson.loads(as_bytes)
+    as_obj = xorjson.loads(as_bytes)
     for _ in range(1000):
-        assert orjson.loads(orjson.dumps(as_obj, option=orjson.OPT_INDENT_2)) == as_obj
+        assert xorjson.loads(xorjson.dumps(as_obj, option=xorjson.OPT_INDENT_2)) == as_obj
 
 
 def test_issue331_2_compact():
     as_bytes = read_fixture_bytes("issue331_2.json.xz")
-    as_obj = orjson.loads(as_bytes)
+    as_obj = xorjson.loads(as_bytes)
     for _ in range(1000):
-        assert orjson.loads(orjson.dumps(as_obj)) == as_obj
+        assert xorjson.loads(xorjson.dumps(as_obj)) == as_obj
 
 
 def test_issue335_compact():
     for _ in range(1000):
-        assert orjson.dumps(FIXTURE_ISSUE_335)
+        assert xorjson.dumps(FIXTURE_ISSUE_335)
 
 
 def test_issue335_pretty():
     for _ in range(1000):
-        assert orjson.dumps(FIXTURE_ISSUE_335, option=orjson.OPT_INDENT_2)
+        assert xorjson.dumps(FIXTURE_ISSUE_335, option=xorjson.OPT_INDENT_2)

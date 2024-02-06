@@ -2,7 +2,7 @@
 
 import pytest
 
-import orjson
+import xorjson
 
 try:
     import pandas
@@ -14,70 +14,70 @@ from .util import read_fixture_bytes
 
 class TestFragment:
     def test_fragment_fragment_eq(self):
-        assert orjson.Fragment(b"{}") != orjson.Fragment(b"{}")
+        assert xorjson.Fragment(b"{}") != xorjson.Fragment(b"{}")
 
     def test_fragment_fragment_not_mut(self):
-        fragment = orjson.Fragment(b"{}")
+        fragment = xorjson.Fragment(b"{}")
         with pytest.raises(AttributeError):
             fragment.contents = b"[]"
-        assert orjson.dumps(fragment) == b"{}"
+        assert xorjson.dumps(fragment) == b"{}"
 
     def test_fragment_repr(self):
-        assert repr(orjson.Fragment(b"{}")).startswith("<orjson.Fragment object at ")
+        assert repr(xorjson.Fragment(b"{}")).startswith("<xorjson.Fragment object at ")
 
     def test_fragment_fragment_bytes(self):
-        assert orjson.dumps(orjson.Fragment(b"{}")) == b"{}"
-        assert orjson.dumps(orjson.Fragment(b"[]")) == b"[]"
-        assert orjson.dumps([orjson.Fragment(b"{}")]) == b"[{}]"
-        assert orjson.dumps([orjson.Fragment(b'{}"a\\')]) == b'[{}"a\\]'
+        assert xorjson.dumps(xorjson.Fragment(b"{}")) == b"{}"
+        assert xorjson.dumps(xorjson.Fragment(b"[]")) == b"[]"
+        assert xorjson.dumps([xorjson.Fragment(b"{}")]) == b"[{}]"
+        assert xorjson.dumps([xorjson.Fragment(b'{}"a\\')]) == b'[{}"a\\]'
 
     def test_fragment_fragment_str(self):
-        assert orjson.dumps(orjson.Fragment("{}")) == b"{}"
-        assert orjson.dumps(orjson.Fragment("[]")) == b"[]"
-        assert orjson.dumps([orjson.Fragment("{}")]) == b"[{}]"
-        assert orjson.dumps([orjson.Fragment('{}"a\\')]) == b'[{}"a\\]'
+        assert xorjson.dumps(xorjson.Fragment("{}")) == b"{}"
+        assert xorjson.dumps(xorjson.Fragment("[]")) == b"[]"
+        assert xorjson.dumps([xorjson.Fragment("{}")]) == b"[{}]"
+        assert xorjson.dumps([xorjson.Fragment('{}"a\\')]) == b'[{}"a\\]'
 
     def test_fragment_fragment_str_empty(self):
-        assert orjson.dumps(orjson.Fragment("")) == b""
+        assert xorjson.dumps(xorjson.Fragment("")) == b""
 
     def test_fragment_fragment_str_str(self):
-        assert orjson.dumps(orjson.Fragment('"str"')) == b'"str"'
+        assert xorjson.dumps(xorjson.Fragment('"str"')) == b'"str"'
 
     def test_fragment_fragment_str_emoji(self):
-        assert orjson.dumps(orjson.Fragment('"🐈"')) == b'"\xf0\x9f\x90\x88"'
+        assert xorjson.dumps(xorjson.Fragment('"🐈"')) == b'"\xf0\x9f\x90\x88"'
 
     def test_fragment_fragment_str_array(self):
         n = 8096
-        obj = [orjson.Fragment('"🐈"')] * n
+        obj = [xorjson.Fragment('"🐈"')] * n
         ref = b"[" + b",".join((b'"\xf0\x9f\x90\x88"' for _ in range(0, n))) + b"]"
-        assert orjson.dumps(obj) == ref
+        assert xorjson.dumps(obj) == ref
 
     def test_fragment_fragment_str_invalid(self):
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(orjson.Fragment("\ud800"))  # type: ignore
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(xorjson.Fragment("\ud800"))  # type: ignore
 
     def test_fragment_fragment_bytes_invalid(self):
-        assert orjson.dumps(orjson.Fragment(b"\\ud800")) == b"\\ud800"
+        assert xorjson.dumps(xorjson.Fragment(b"\\ud800")) == b"\\ud800"
 
     def test_fragment_fragment_none(self):
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps([orjson.Fragment(None)])  # type: ignore
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps([xorjson.Fragment(None)])  # type: ignore
 
     def test_fragment_fragment_args_zero(self):
         with pytest.raises(TypeError):
-            orjson.dumps(orjson.Fragment())
+            xorjson.dumps(xorjson.Fragment())
 
     def test_fragment_fragment_args_two(self):
         with pytest.raises(TypeError):
-            orjson.dumps(orjson.Fragment(b"{}", None))  # type: ignore
+            xorjson.dumps(xorjson.Fragment(b"{}", None))  # type: ignore
 
     def test_fragment_fragment_keywords(self):
         with pytest.raises(TypeError):
-            orjson.dumps(orjson.Fragment(contents=b"{}"))  # type: ignore
+            xorjson.dumps(xorjson.Fragment(contents=b"{}"))  # type: ignore
 
     def test_fragment_fragment_arg_and_keywords(self):
         with pytest.raises(TypeError):
-            orjson.dumps(orjson.Fragment(b"{}", contents=b"{}"))  # type: ignore
+            xorjson.dumps(xorjson.Fragment(b"{}", contents=b"{}"))  # type: ignore
 
 
 @pytest.mark.skipif(pandas is None, reason="pandas is not installed")
@@ -89,12 +89,12 @@ class TestFragmentPandas:
 
         def default(value):
             if isinstance(value, pandas.DataFrame):
-                return orjson.Fragment(value.to_json(orient="records"))
+                return xorjson.Fragment(value.to_json(orient="records"))
             raise TypeError
 
         val = pandas.DataFrame({"foo": [1, 2, 3], "bar": [4, 5, 6]})
         assert (
-            orjson.dumps({"data": val}, default=default)
+            xorjson.dumps({"data": val}, default=default)
             == b'{"data":[{"foo":1,"bar":4},{"foo":2,"bar":5},{"foo":3,"bar":6}]}'
         )
 
@@ -102,7 +102,7 @@ class TestFragmentPandas:
 class TestFragmentParsing:
     def _run_test(self, filename: str):
         data = read_fixture_bytes(filename, "parsing")
-        orjson.dumps(orjson.Fragment(data))
+        xorjson.dumps(xorjson.Fragment(data))
 
     def test_fragment_y_array_arraysWithSpace(self):
         self._run_test("y_array_arraysWithSpaces.json")

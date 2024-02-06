@@ -5,7 +5,7 @@ import enum
 
 import pytest
 
-import orjson
+import xorjson
 
 
 class StrEnum(str, enum.Enum):
@@ -69,40 +69,40 @@ class TestEnum:
                 B = "b"
 
     def test_arbitrary_enum(self):
-        assert orjson.dumps(UnspecifiedEnum.A) == b'"a"'
-        assert orjson.dumps(UnspecifiedEnum.B) == b"1"
-        assert orjson.dumps(UnspecifiedEnum.C) == b"1.1"
-        assert orjson.dumps(UnspecifiedEnum.D) == b'{"d":1}'
+        assert xorjson.dumps(UnspecifiedEnum.A) == b'"a"'
+        assert xorjson.dumps(UnspecifiedEnum.B) == b"1"
+        assert xorjson.dumps(UnspecifiedEnum.C) == b"1.1"
+        assert xorjson.dumps(UnspecifiedEnum.D) == b'{"d":1}'
 
     def test_custom_enum(self):
-        assert orjson.dumps(UnspecifiedEnum.E, default=default) == b'"c"'
+        assert xorjson.dumps(UnspecifiedEnum.E, default=default) == b'"c"'
 
     def test_enum_options(self):
         assert (
-            orjson.dumps(UnspecifiedEnum.F, option=orjson.OPT_NAIVE_UTC)
+            xorjson.dumps(UnspecifiedEnum.F, option=xorjson.OPT_NAIVE_UTC)
             == b'"1970-01-01T00:00:00+00:00"'
         )
 
     def test_int_enum(self):
-        assert orjson.dumps(IntEnum.ONE) == b"1"
+        assert xorjson.dumps(IntEnum.ONE) == b"1"
 
     def test_intenum_enum(self):
-        assert orjson.dumps(IntEnumEnum.ONE) == b"1"
+        assert xorjson.dumps(IntEnumEnum.ONE) == b"1"
 
     def test_intflag_enum(self):
-        assert orjson.dumps(IntFlagEnum.ONE) == b"1"
+        assert xorjson.dumps(IntFlagEnum.ONE) == b"1"
 
     def test_flag_enum(self):
-        assert orjson.dumps(FlagEnum.ONE) == b"1"
+        assert xorjson.dumps(FlagEnum.ONE) == b"1"
 
     def test_auto_enum(self):
-        assert orjson.dumps(AutoEnum.A) == b'"a"'
+        assert xorjson.dumps(AutoEnum.A) == b'"a"'
 
     def test_float_enum(self):
-        assert orjson.dumps(FloatEnum.ONE) == b"1.1"
+        assert xorjson.dumps(FloatEnum.ONE) == b"1.1"
 
     def test_str_enum(self):
-        assert orjson.dumps(StrEnum.AAA) == b'"aaa"'
+        assert xorjson.dumps(StrEnum.AAA) == b'"aaa"'
 
     def test_bool_enum(self):
         with pytest.raises(TypeError):
@@ -112,9 +112,9 @@ class TestEnum:
 
     def test_non_str_keys_enum(self):
         assert (
-            orjson.dumps({StrEnum.AAA: 1}, option=orjson.OPT_NON_STR_KEYS)
+            xorjson.dumps({StrEnum.AAA: 1}, option=xorjson.OPT_NON_STR_KEYS)
             == b'{"aaa":1}'
         )
         assert (
-            orjson.dumps({IntEnum.ONE: 1}, option=orjson.OPT_NON_STR_KEYS) == b'{"1":1}'
+            xorjson.dumps({IntEnum.ONE: 1}, option=xorjson.OPT_NON_STR_KEYS) == b'{"1":1}'
         )

@@ -6,7 +6,7 @@ import uuid
 
 import pytest
 
-import orjson
+import xorjson
 
 try:
     import numpy
@@ -43,14 +43,14 @@ class TestType:
         """
         dumps() default not callable
         """
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(Custom(), default=NotImplementedError)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(Custom(), default=NotImplementedError)
 
         ran = False
         try:
-            orjson.dumps(Custom(), default=NotImplementedError)
+            xorjson.dumps(Custom(), default=NotImplementedError)
         except Exception as err:
-            assert isinstance(err, orjson.JSONEncodeError)
+            assert isinstance(err, xorjson.JSONEncodeError)
             assert str(err) == "default serializer exceeds recursion limit"
             ran = True
         assert ran
@@ -64,13 +64,13 @@ class TestType:
         def default(obj):
             return str(obj)
 
-        assert orjson.dumps(ref, default=default) == b'"%s"' % str(ref).encode("utf-8")
+        assert xorjson.dumps(ref, default=default) == b'"%s"' % str(ref).encode("utf-8")
 
     def test_default_func_none(self):
         """
         dumps() default function None ok
         """
-        assert orjson.dumps(Custom(), default=lambda x: None) == b"null"
+        assert xorjson.dumps(Custom(), default=lambda x: None) == b"null"
 
     def test_default_func_empty(self):
         """
@@ -82,8 +82,8 @@ class TestType:
             if isinstance(obj, set):
                 return list(obj)
 
-        assert orjson.dumps(ref, default=default) == b"null"
-        assert orjson.dumps({ref}, default=default) == b"[null]"
+        assert xorjson.dumps(ref, default=default) == b"null"
+        assert xorjson.dumps({ref}, default=default) == b"[null]"
 
     def test_default_func_exc(self):
         """
@@ -93,26 +93,26 @@ class TestType:
         def default(obj):
             raise NotImplementedError
 
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(Custom(), default=default)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(Custom(), default=default)
 
         ran = False
         try:
-            orjson.dumps(Custom(), default=default)
+            xorjson.dumps(Custom(), default=default)
         except Exception as err:
-            assert isinstance(err, orjson.JSONEncodeError)
+            assert isinstance(err, xorjson.JSONEncodeError)
             assert str(err) == "Type is not JSON serializable: Custom"
             ran = True
         assert ran
 
     def test_default_exception_type(self):
         """
-        dumps() TypeError in default() raises orjson.JSONEncodeError
+        dumps() TypeError in default() raises xorjson.JSONEncodeError
         """
         ref = Custom()
 
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(ref, default=default_raises)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(ref, default=default_raises)
 
     def test_default_vectorcall_str(self):
         """
@@ -125,7 +125,7 @@ class TestType:
         obj = SubStr("saasa")
         ref = b'"%s"' % str(obj).encode("utf-8")
         assert (
-            orjson.dumps(obj, option=orjson.OPT_PASSTHROUGH_SUBCLASS, default=str)
+            xorjson.dumps(obj, option=xorjson.OPT_PASSTHROUGH_SUBCLASS, default=str)
             == ref
         )
 
@@ -135,7 +135,7 @@ class TestType:
         """
         obj = {1, 2}
         ref = b"[1,2]"
-        assert orjson.dumps(obj, default=list) == ref
+        assert xorjson.dumps(obj, default=list) == ref
 
     def test_default_func_nested_str(self):
         """
@@ -146,7 +146,7 @@ class TestType:
         def default(obj):
             return str(obj)
 
-        assert orjson.dumps({"a": ref}, default=default) == b'{"a":"%s"}' % str(
+        assert xorjson.dumps({"a": ref}, default=default) == b'{"a":"%s"}' % str(
             ref
         ).encode("utf-8")
 
@@ -160,7 +160,7 @@ class TestType:
             if isinstance(obj, Custom):
                 return [str(obj)]
 
-        assert orjson.dumps({"a": ref}, default=default) == b'{"a":["%s"]}' % str(
+        assert xorjson.dumps({"a": ref}, default=default) == b'{"a":["%s"]}' % str(
             ref
         ).encode("utf-8")
 
@@ -173,7 +173,7 @@ class TestType:
         def default(obj):
             return str(obj)
 
-        assert orjson.dumps([ref] * 100, default=default) == b"[%s]" % b",".join(
+        assert xorjson.dumps([ref] * 100, default=default) == b"[%s]" % b",".join(
             b'"%s"' % str(ref).encode("utf-8") for _ in range(100)
         )
 
@@ -186,14 +186,14 @@ class TestType:
         def default(obj):
             return bytes(obj)
 
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(ref, default=default)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(ref, default=default)
 
         ran = False
         try:
-            orjson.dumps(ref, default=default)
+            xorjson.dumps(ref, default=default)
         except Exception as err:
-            assert isinstance(err, orjson.JSONEncodeError)
+            assert isinstance(err, xorjson.JSONEncodeError)
             assert str(err) == "Type is not JSON serializable: Custom"
             ran = True
         assert ran
@@ -207,15 +207,15 @@ class TestType:
         def default(obj):
             return "\ud800"
 
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(ref, default=default)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(ref, default=default)
 
     def test_default_lambda_ok(self):
         """
         dumps() default lambda
         """
         ref = Custom()
-        assert orjson.dumps(ref, default=lambda x: str(x)) == b'"%s"' % str(ref).encode(
+        assert xorjson.dumps(ref, default=lambda x: str(x)) == b'"%s"' % str(ref).encode(
             "utf-8"
         )
 
@@ -236,20 +236,20 @@ class TestType:
         ref_obj = Custom()
         ref_bytes = b'"%s"' % str(ref_obj).encode("utf-8")
         for obj in [ref_obj] * 100:
-            assert orjson.dumps(obj, default=CustomSerializer()) == ref_bytes
+            assert xorjson.dumps(obj, default=CustomSerializer()) == ref_bytes
 
     def test_default_recursion(self):
         """
         dumps() default recursion limit
         """
-        assert orjson.dumps(Recursive(254), default=default_recursive) == b"0"
+        assert xorjson.dumps(Recursive(254), default=default_recursive) == b"0"
 
     def test_default_recursion_reset(self):
         """
         dumps() default recursion limit reset
         """
         assert (
-            orjson.dumps(
+            xorjson.dumps(
                 [Recursive(254), {"a": "b"}, Recursive(254), Recursive(254)],
                 default=default_recursive,
             )
@@ -266,8 +266,8 @@ class TestType:
             return obj
 
         refcount = sys.getrefcount(ref)
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(ref, default=default)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(ref, default=default)
         assert sys.getrefcount(ref) == refcount
 
     def test_reference_cleanup_default_custom_pass(self):
@@ -279,7 +279,7 @@ class TestType:
             raise TypeError
 
         refcount = sys.getrefcount(ref)
-        orjson.dumps(ref, default=default)
+        xorjson.dumps(ref, default=default)
         assert sys.getrefcount(ref) == refcount
 
     def test_reference_cleanup_default_custom_error(self):
@@ -292,8 +292,8 @@ class TestType:
             raise TypeError
 
         refcount = sys.getrefcount(ref)
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(ref, default=default)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(ref, default=default)
         assert sys.getrefcount(ref) == refcount
 
     def test_reference_cleanup_default_subclass(self):
@@ -305,15 +305,15 @@ class TestType:
             raise TypeError
 
         refcount = sys.getrefcount(ref)
-        orjson.dumps(ref, option=orjson.OPT_PASSTHROUGH_DATETIME, default=default)
+        xorjson.dumps(ref, option=xorjson.OPT_PASSTHROUGH_DATETIME, default=default)
         assert sys.getrefcount(ref) == refcount
 
     def test_reference_cleanup_default_subclass_lambda(self):
         ref = uuid.uuid4()
 
         refcount = sys.getrefcount(ref)
-        orjson.dumps(
-            ref, option=orjson.OPT_PASSTHROUGH_DATETIME, default=lambda val: str(val)
+        xorjson.dumps(
+            ref, option=xorjson.OPT_PASSTHROUGH_DATETIME, default=lambda val: str(val)
         )
         assert sys.getrefcount(ref) == refcount
 
@@ -321,8 +321,8 @@ class TestType:
     def test_default_numpy(self):
         ref = numpy.array([""] * 100)
         refcount = sys.getrefcount(ref)
-        orjson.dumps(
-            ref, option=orjson.OPT_SERIALIZE_NUMPY, default=lambda val: val.tolist()
+        xorjson.dumps(
+            ref, option=xorjson.OPT_SERIALIZE_NUMPY, default=lambda val: val.tolist()
         )
         assert sys.getrefcount(ref) == refcount
 
@@ -336,4 +336,4 @@ class TestType:
                 return list(obj)
             raise TypeError
 
-        assert orjson.dumps({1, 2}, default=default) == b"[1,2]"
+        assert xorjson.dumps({1, 2}, default=default) == b"[1,2]"

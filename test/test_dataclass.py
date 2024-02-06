@@ -8,7 +8,7 @@ from typing import ClassVar, Dict, Optional
 
 import pytest
 
-import orjson
+import xorjson
 
 
 class AnEnum(Enum):
@@ -119,7 +119,7 @@ class TestDataclass:
         dumps() dataclass
         """
         obj = Dataclass1("a", 1, None)
-        assert orjson.dumps(obj) == b'{"name":"a","number":1,"sub":null}'
+        assert xorjson.dumps(obj) == b'{"name":"a","number":1,"sub":null}'
 
     def test_dataclass_recursive(self):
         """
@@ -127,7 +127,7 @@ class TestDataclass:
         """
         obj = Dataclass1("a", 1, Dataclass1("b", 2, None))
         assert (
-            orjson.dumps(obj)
+            xorjson.dumps(obj)
             == b'{"name":"a","number":1,"sub":{"name":"b","number":2,"sub":null}}'
         )
 
@@ -138,27 +138,27 @@ class TestDataclass:
         obj1 = Dataclass1("a", 1, None)
         obj2 = Dataclass1("b", 2, obj1)
         obj1.sub = obj2
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj1)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj1)
 
     def test_dataclass_empty(self):
         """
         dumps() no attributes
         """
-        assert orjson.dumps(EmptyDataclass()) == b"{}"
+        assert xorjson.dumps(EmptyDataclass()) == b"{}"
 
     def test_dataclass_empty_slots(self):
         """
         dumps() no attributes slots
         """
-        assert orjson.dumps(EmptyDataclassSlots()) == b"{}"
+        assert xorjson.dumps(EmptyDataclassSlots()) == b"{}"
 
     def test_dataclass_default_arg(self):
         """
         dumps() dataclass default arg
         """
         obj = Dataclass2()
-        assert orjson.dumps(obj) == b'{"name":"?"}'
+        assert xorjson.dumps(obj) == b'{"name":"?"}'
 
     def test_dataclass_types(self):
         """
@@ -166,7 +166,7 @@ class TestDataclass:
         """
         obj = Dataclass3("a", 1, {"a": "b"}, True, 1.1, [1, 2], (3, 4))
         assert (
-            orjson.dumps(obj)
+            xorjson.dumps(obj)
             == b'{"a":"a","b":1,"c":{"a":"b"},"d":true,"e":1.1,"f":[1,2],"g":[3,4]}'
         )
 
@@ -175,14 +175,14 @@ class TestDataclass:
         dumps() dataclass metadata
         """
         obj = Dataclass4("a", 1, 2.1)
-        assert orjson.dumps(obj) == b'{"a":"a","b":1,"c":2.1}'
+        assert xorjson.dumps(obj) == b'{"a":"a","b":1,"c":2.1}'
 
     def test_dataclass_classvar(self):
         """
         dumps() dataclass class variable
         """
         obj = Dataclass4("a", 1)
-        assert orjson.dumps(obj) == b'{"a":"a","b":1,"c":1.1}'
+        assert xorjson.dumps(obj) == b'{"a":"a","b":1,"c":1.1}'
 
     def test_dataclass_subclass(self):
         """
@@ -190,7 +190,7 @@ class TestDataclass:
         """
         obj = Datasubclass("a", 1, None, False)
         assert (
-            orjson.dumps(obj)
+            xorjson.dumps(obj)
             == b'{"name":"a","number":1,"sub":null,"additional":false}'
         )
 
@@ -200,7 +200,7 @@ class TestDataclass:
         """
         obj = Slotsdataclass("a", 1, "c", "d")
         assert "__dict__" not in dir(obj)
-        assert orjson.dumps(obj) == b'{"a":"a","b":1}'
+        assert xorjson.dumps(obj) == b'{"a":"a","b":1}'
 
     def test_dataclass_default(self):
         """
@@ -217,7 +217,7 @@ class TestDataclass:
             uuid.UUID("808989c0-00d5-48a8-b5c4-c804bf9032f2"), AnEnum.ONE
         )
         assert (
-            orjson.dumps(obj, default=default)
+            xorjson.dumps(obj, default=default)
             == b'{"a":"808989c0-00d5-48a8-b5c4-c804bf9032f2","b":1}'
         )
 
@@ -227,7 +227,7 @@ class TestDataclass:
         """
         obj = UnsortedDataclass(1, 2, 3, None)
         assert (
-            orjson.dumps(obj, option=orjson.OPT_SORT_KEYS)
+            xorjson.dumps(obj, option=xorjson.OPT_SORT_KEYS)
             == b'{"c":1,"b":2,"a":3,"d":null}'
         )
 
@@ -237,7 +237,7 @@ class TestDataclass:
         """
         obj = UnsortedDataclass(1, 2, 3, {"f": 2, "e": 1})
         assert (
-            orjson.dumps(obj, option=orjson.OPT_SORT_KEYS)
+            xorjson.dumps(obj, option=xorjson.OPT_SORT_KEYS)
             == b'{"c":1,"b":2,"a":3,"d":{"e":1,"f":2}}'
         )
 
@@ -246,7 +246,7 @@ class TestDataclass:
         dumps() does not include under attributes, InitVar, or ClassVar
         """
         obj = InitDataclass("zxc", "vbn")
-        assert orjson.dumps(obj) == b'{"ab":"zxc vbn"}'
+        assert xorjson.dumps(obj) == b'{"ab":"zxc vbn"}'
 
     def test_dataclass_option(self):
         """
@@ -254,7 +254,7 @@ class TestDataclass:
         """
         obj = Dataclass1("a", 1, None)
         assert (
-            orjson.dumps(obj, option=orjson.OPT_SERIALIZE_DATACLASS)
+            xorjson.dumps(obj, option=xorjson.OPT_SERIALIZE_DATACLASS)
             == b'{"name":"a","number":1,"sub":null}'
         )
 
@@ -265,11 +265,11 @@ class TestDataclassPassthrough:
         dumps() dataclass passes to default with OPT_PASSTHROUGH_DATACLASS
         """
         obj = Dataclass1("a", 1, None)
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj, option=orjson.OPT_PASSTHROUGH_DATACLASS)
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(
-                InitDataclass("zxc", "vbn"), option=orjson.OPT_PASSTHROUGH_DATACLASS
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj, option=xorjson.OPT_PASSTHROUGH_DATACLASS)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(
+                InitDataclass("zxc", "vbn"), option=xorjson.OPT_PASSTHROUGH_DATACLASS
             )
 
     def test_dataclass_passthrough_default(self):
@@ -278,7 +278,7 @@ class TestDataclassPassthrough:
         """
         obj = Dataclass1("a", 1, None)
         assert (
-            orjson.dumps(obj, option=orjson.OPT_PASSTHROUGH_DATACLASS, default=asdict)
+            xorjson.dumps(obj, option=xorjson.OPT_PASSTHROUGH_DATACLASS, default=asdict)
             == b'{"name":"a","number":1,"sub":null}'
         )
 
@@ -288,7 +288,7 @@ class TestDataclassPassthrough:
             raise TypeError
 
         assert (
-            orjson.dumps(obj, option=orjson.OPT_PASSTHROUGH_DATACLASS, default=default)
+            xorjson.dumps(obj, option=xorjson.OPT_PASSTHROUGH_DATACLASS, default=default)
             == b'{"name":"a","number":1}'
         )
 
@@ -296,4 +296,4 @@ class TestDataclassPassthrough:
 class TestAbstractDataclass:
     def test_dataclass_abc(self):
         obj = ConcreteAbc(1.0)
-        assert orjson.dumps(obj) == b'{"attr":1.0}'
+        assert xorjson.dumps(obj) == b'{"attr":1.0}'

@@ -2,7 +2,7 @@
 
 import pytest
 
-import orjson
+import xorjson
 
 
 class TestCircular:
@@ -12,8 +12,8 @@ class TestCircular:
         """
         obj = {}  # type: ignore
         obj["obj"] = obj
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj)
 
     def test_circular_dict_sort_keys(self):
         """
@@ -21,8 +21,8 @@ class TestCircular:
         """
         obj = {}  # type: ignore
         obj["obj"] = obj
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj, option=orjson.OPT_SORT_KEYS)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj, option=xorjson.OPT_SORT_KEYS)
 
     def test_circular_dict_non_str_keys(self):
         """
@@ -30,8 +30,8 @@ class TestCircular:
         """
         obj = {}  # type: ignore
         obj["obj"] = obj
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj, option=orjson.OPT_NON_STR_KEYS)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj, option=xorjson.OPT_NON_STR_KEYS)
 
     def test_circular_list(self):
         """
@@ -39,8 +39,8 @@ class TestCircular:
         """
         obj = []  # type: ignore
         obj.append(obj)  # type: ignore
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj)
 
     def test_circular_nested(self):
         """
@@ -48,8 +48,8 @@ class TestCircular:
         """
         obj = {}  # type: ignore
         obj["list"] = [{"obj": obj}]
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj)
 
     def test_circular_nested_sort_keys(self):
         """
@@ -57,8 +57,8 @@ class TestCircular:
         """
         obj = {}  # type: ignore
         obj["list"] = [{"obj": obj}]
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj, option=orjson.OPT_SORT_KEYS)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj, option=xorjson.OPT_SORT_KEYS)
 
     def test_circular_nested_non_str_keys(self):
         """
@@ -66,5 +66,5 @@ class TestCircular:
         """
         obj = {}  # type: ignore
         obj["list"] = [{"obj": obj}]
-        with pytest.raises(orjson.JSONEncodeError):
-            orjson.dumps(obj, option=orjson.OPT_NON_STR_KEYS)
+        with pytest.raises(xorjson.JSONEncodeError):
+            xorjson.dumps(obj, option=xorjson.OPT_NON_STR_KEYS)

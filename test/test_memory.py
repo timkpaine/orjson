@@ -17,7 +17,7 @@ except ImportError:
     psutil = None  # type: ignore
 import pytest
 
-import orjson
+import xorjson
 
 try:
     import numpy
@@ -76,11 +76,11 @@ class TestMemory:
         """
         proc = psutil.Process()
         gc.collect()
-        val = orjson.loads(FIXTURE)
+        val = xorjson.loads(FIXTURE)
         assert val
         mem = proc.memory_info().rss
         for _ in range(10000):
-            val = orjson.loads(FIXTURE)
+            val = xorjson.loads(FIXTURE)
             assert val
         gc.collect()
         assert proc.memory_info().rss <= mem + MAX_INCREASE
@@ -93,11 +93,11 @@ class TestMemory:
         proc = psutil.Process()
         gc.collect()
         fixture = FIXTURE.encode("utf-8")
-        val = orjson.loads(fixture)
+        val = xorjson.loads(fixture)
         assert val
         mem = proc.memory_info().rss
         for _ in range(10000):
-            val = orjson.loads(memoryview(fixture))
+            val = xorjson.loads(memoryview(fixture))
             assert val
         gc.collect()
         assert proc.memory_info().rss <= mem + MAX_INCREASE
@@ -109,12 +109,12 @@ class TestMemory:
         """
         proc = psutil.Process()
         gc.collect()
-        fixture = orjson.loads(FIXTURE)
-        val = orjson.dumps(fixture)
+        fixture = xorjson.loads(FIXTURE)
+        val = xorjson.dumps(fixture)
         assert val
         mem = proc.memory_info().rss
         for _ in range(10000):
-            val = orjson.dumps(fixture)
+            val = xorjson.dumps(fixture)
             assert val
         gc.collect()
         assert proc.memory_info().rss <= mem + MAX_INCREASE
@@ -132,8 +132,8 @@ class TestMemory:
         i = 0
         for _ in range(n):
             try:
-                orjson.loads("")
-            except orjson.JSONDecodeError:
+                xorjson.loads("")
+            except xorjson.JSONDecodeError:
                 i += 1
         assert n == i
         assert proc.memory_info().rss <= mem + MAX_INCREASE
@@ -152,8 +152,8 @@ class TestMemory:
         i = 0
         for _ in range(n):
             try:
-                orjson.dumps(data)
-            except orjson.JSONEncodeError:
+                xorjson.dumps(data)
+            except xorjson.JSONEncodeError:
                 i += 1
         assert n == i
         assert proc.memory_info().rss <= mem + MAX_INCREASE
@@ -166,7 +166,7 @@ class TestMemory:
         """
         proc = psutil.Process()
         gc.collect()
-        fixture = orjson.loads(FIXTURE)
+        fixture = xorjson.loads(FIXTURE)
 
         class Custom:
             def __init__(self, name):
@@ -175,11 +175,11 @@ class TestMemory:
             def __str__(self):
                 return f"{self.__class__.__name__}({self.name})"
 
-        fixture["custom"] = Custom("orjson")
-        val = orjson.dumps(fixture, default=default)
+        fixture["custom"] = Custom("xorjson")
+        val = xorjson.dumps(fixture, default=default)
         mem = proc.memory_info().rss
         for _ in range(10000):
-            val = orjson.dumps(fixture, default=default)
+            val = xorjson.dumps(fixture, default=default)
             assert val
         gc.collect()
         assert proc.memory_info().rss <= mem + MAX_INCREASE
@@ -191,11 +191,11 @@ class TestMemory:
         """
         proc = psutil.Process()
         gc.collect()
-        val = orjson.dumps(DATACLASS_FIXTURE)
+        val = xorjson.dumps(DATACLASS_FIXTURE)
         assert val
         mem = proc.memory_info().rss
         for _ in range(100):
-            val = orjson.dumps(DATACLASS_FIXTURE)
+            val = xorjson.dumps(DATACLASS_FIXTURE)
             assert val
         assert val
         gc.collect()
@@ -212,11 +212,11 @@ class TestMemory:
         proc = psutil.Process()
         gc.collect()
         dt = datetime.datetime.now()
-        val = orjson.dumps(pytz.UTC.localize(dt))
+        val = xorjson.dumps(pytz.UTC.localize(dt))
         assert val
         mem = proc.memory_info().rss
         for _ in range(50000):
-            val = orjson.dumps(pytz.UTC.localize(dt))
+            val = xorjson.dumps(pytz.UTC.localize(dt))
             assert val
         assert val
         gc.collect()
@@ -231,12 +231,12 @@ class TestMemory:
         gc.collect()
         fixture = {"key_%s" % idx: "value" for idx in range(1024)}
         assert len(fixture) == 1024
-        val = orjson.dumps(fixture)
-        loaded = orjson.loads(val)
+        val = xorjson.dumps(fixture)
+        loaded = xorjson.loads(val)
         assert loaded
         mem = proc.memory_info().rss
         for _ in range(100):
-            loaded = orjson.loads(val)
+            loaded = xorjson.loads(val)
             assert loaded
         gc.collect()
         assert proc.memory_info().rss <= mem + MAX_INCREASE
@@ -250,11 +250,11 @@ class TestMemory:
         proc = psutil.Process()
         gc.collect()
         fixture = numpy.random.rand(4, 4, 4)
-        val = orjson.dumps(fixture, option=orjson.OPT_SERIALIZE_NUMPY)
+        val = xorjson.dumps(fixture, option=xorjson.OPT_SERIALIZE_NUMPY)
         assert val
         mem = proc.memory_info().rss
         for _ in range(100):
-            val = orjson.dumps(fixture, option=orjson.OPT_SERIALIZE_NUMPY)
+            val = xorjson.dumps(fixture, option=xorjson.OPT_SERIALIZE_NUMPY)
             assert val
         assert val
         gc.collect()
@@ -270,11 +270,11 @@ class TestMemory:
         gc.collect()
         numpy.random.rand(4, 4, 4)
         df = pandas.Series(numpy.random.rand(4, 4, 4).tolist())
-        val = df.map(orjson.dumps)
+        val = df.map(xorjson.dumps)
         assert not val.empty
         mem = proc.memory_info().rss
         for _ in range(100):
-            val = df.map(orjson.dumps)
+            val = df.map(xorjson.dumps)
             assert not val.empty
         gc.collect()
         assert proc.memory_info().rss <= mem + MAX_INCREASE
@@ -286,9 +286,9 @@ class TestMemory:
         """
         proc = psutil.Process()
         gc.collect()
-        orjson.dumps(orjson.Fragment(str(0)))
+        xorjson.dumps(xorjson.Fragment(str(0)))
         mem = proc.memory_info().rss
         for i in range(10000):
-            orjson.dumps(orjson.Fragment(str(i)))
+            xorjson.dumps(xorjson.Fragment(str(i)))
         gc.collect()
         assert proc.memory_info().rss <= mem + MAX_INCREASE

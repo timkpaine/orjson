@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-import orjson
+import xorjson
 
 try:
     from typing import TypedDict  # type: ignore
@@ -19,4 +19,4 @@ class TestTypedDict:
             b: int
 
         obj = TypedDict1(a="a", b=1)
-        assert orjson.dumps(obj) == b'{"a":"a","b":1}'
+        assert xorjson.dumps(obj) == b'{"a":"a","b":1}'

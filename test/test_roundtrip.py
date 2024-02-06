@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-import orjson
+import xorjson
 
 from .util import read_fixture_str
 
@@ -8,7 +8,7 @@ from .util import read_fixture_str
 class TestJsonChecker:
     def _run_roundtrip_json(self, filename):
         data = read_fixture_str(filename, "roundtrip")
-        assert orjson.dumps(orjson.loads(data)) == data.encode("utf-8")
+        assert xorjson.dumps(xorjson.loads(data)) == data.encode("utf-8")
 
     def test_roundtrip001(self):
         """

@@ -2,7 +2,7 @@
 
 import pytest
 
-import orjson
+import xorjson
 
 
 @pytest.mark.parametrize(
@@ -13,5 +13,5 @@ import orjson
     ],
 )
 def test_invalid(input):
-    with pytest.raises(orjson.JSONDecodeError):
-        orjson.loads(input)
+    with pytest.raises(xorjson.JSONDecodeError):
+        xorjson.loads(input)

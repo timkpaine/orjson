@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict
 
-import orjson
+import xorjson
 
 dirname = os.path.join(os.path.dirname(__file__), "../data")
 
@@ -34,5 +34,5 @@ def read_fixture_str(filename, subdir=None):
 
 def read_fixture_obj(filename):
     if filename not in OBJ_CACHE:
-        OBJ_CACHE[filename] = orjson.loads(read_fixture_str(filename))
+        OBJ_CACHE[filename] = xorjson.loads(read_fixture_str(filename))
     return OBJ_CACHE[filename]

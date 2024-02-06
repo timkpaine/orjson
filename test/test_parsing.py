@@ -2,34 +2,34 @@
 
 import pytest
 
-import orjson
+import xorjson
 
 from .util import read_fixture_bytes
 
 
 class TestJSONTestSuiteParsing:
-    def _run_fail_json(self, filename, exc=orjson.JSONDecodeError):
+    def _run_fail_json(self, filename, exc=xorjson.JSONDecodeError):
         data = read_fixture_bytes(filename, "parsing")
         with pytest.raises(exc):
-            orjson.loads(data)
+            xorjson.loads(data)
         with pytest.raises(exc):
-            orjson.loads(bytearray(data))
+            xorjson.loads(bytearray(data))
         with pytest.raises(exc):
-            orjson.loads(memoryview(data))
+            xorjson.loads(memoryview(data))
         try:
             decoded = data.decode("utf-8")
         except UnicodeDecodeError:
             pass
         else:
             with pytest.raises(exc):
-                orjson.loads(decoded)
+                xorjson.loads(decoded)
 
     def _run_pass_json(self, filename, match=""):
         data = read_fixture_bytes(filename, "parsing")
-        orjson.loads(data)
-        orjson.loads(bytearray(data))
-        orjson.loads(memoryview(data))
-        orjson.loads(data.decode("utf-8"))
+        xorjson.loads(data)
+        xorjson.loads(bytearray(data))
+        xorjson.loads(memoryview(data))
+        xorjson.loads(data.decode("utf-8"))
 
     def test_y_array_arraysWithSpace(self):
         """
@@ -1935,7 +1935,7 @@ class TestJSONTestSuiteParsing:
         """
         try:
             self._run_pass_json("i_structure_500_nested_arrays.json.xz")
-        except orjson.JSONDecodeError:
+        except xorjson.JSONDecodeError:
             # fails on serde, passes on yyjson
             pass
 
