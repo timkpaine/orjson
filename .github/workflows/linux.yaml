@@ -24,7 +24,7 @@ jobs:
 
     - run: maturin sdist --out=dist
 
-    - run: python3 -m pip install --user dist/orjson*.tar.gz
+    - run: python3 -m pip install --user dist/xorjson*.tar.gz
       env:
         CARGO_NET_OFFLINE: "true"
 
@@ -88,7 +88,7 @@ jobs:
           --compatibility manylinux_2_17 \
           --interpreter python${{ matrix.python.version }} \
           --target=x86_64-unknown-linux-gnu
-    - run: python3 -m pip install --user dist/orjson*.whl
+    - run: python3 -m pip install --user dist/xorjson*.whl
     - run: python3 -m pip install --user -r test/requirements.txt -r integration/requirements.txt
 
     - run: pytest -s -rxX -v test
@@ -169,7 +169,7 @@ jobs:
           python${{ matrix.python.version }} -m venv venv
           venv/bin/pip install -U pip wheel
           venv/bin/pip install -r test/requirements.txt
-          venv/bin/pip install orjson --no-index --find-links dist/ --force-reinstall
+          venv/bin/pip install xorjson --no-index --find-links dist/ --force-reinstall
           venv/bin/python -m pytest -s -rxX -v test
 
     - name: Store wheels
@@ -262,7 +262,7 @@ jobs:
           python${{ matrix.python.version }} -m venv venv
           venv/bin/pip install -U pip wheel
           venv/bin/pip install -r test/requirements.txt
-          venv/bin/pip install orjson --no-index --find-links dist/ --force-reinstall
+          venv/bin/pip install xorjson --no-index --find-links dist/ --force-reinstall
           venv/bin/python -m pytest -s -rxX -v test
 
     - name: Store wheels

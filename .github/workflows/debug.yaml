@@ -42,7 +42,7 @@ jobs:
           --interpreter python${{ matrix.python.version }} \
           --target=x86_64-unknown-linux-gnu ${{ matrix.profile.features }}
 
-    - run: python -m pip install --user dist/orjson*.whl
+    - run: python -m pip install --user dist/xorjson*.whl
     - run: python -m pip install --user -r test/requirements.txt -r integration/requirements.txt
 
     - run: pytest -s -rxX -v test
