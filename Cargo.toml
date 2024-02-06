@@ -1,14 +1,14 @@
 [package]
-name = "orjson"
+name = "xorjson"
 version = "3.9.13"
-authors = ["ijl <ijl@mailbox.org>"]
+authors = ["timkpaine <t.paine154@gmail.com>"]
 description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy"
 edition = "2021"
 resolver = "2"
 rust-version = "1.65"
 license = "Apache-2.0 OR MIT"
-repository = "https://github.com/ijl/orjson"
-homepage = "https://github.com/ijl/orjson"
+repository = "https://github.com/timkpaine/xorjson"
+homepage = "https://github.com/timkpaine/xorjson"
 readme = "README.md"
 keywords = ["fast", "json", "dataclass", "dataclasses", "datetime", "rfc", "8259", "3339"]
 include = [
@@ -26,7 +26,7 @@ include = [
 ]
 
 [lib]
-name = "orjson"
+name = "xorjson"
 crate-type = ["cdylib"]
 
 [features]

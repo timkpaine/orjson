@@ -1,6 +1,6 @@
 [project]
-name = "orjson"
-repository = "https://github.com/ijl/orjson"
+name = "xorjson"
+repository = "https://github.com/timkpaine/xorjson"
 requires-python = ">=3.8"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 [project.urls]
-Changelog = "https://github.com/ijl/orjson/blob/master/CHANGELOG.md"
+Changelog = "https://github.com/timkpaine/xorjson/blob/master/CHANGELOG.md"
 
 [build-system]
 build-backend = "maturin"

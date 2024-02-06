@@ -1,13 +1,13 @@
 # orjson
 
 orjson is a fast, correct JSON library for Python. It
-[benchmarks](https://github.com/ijl/orjson#performance) as the fastest Python
+[benchmarks](https://github.com/timkpaine/xorjson#performance) as the fastest Python
 library for JSON and is more correct than the standard json library or other
 third-party libraries. It serializes
-[dataclass](https://github.com/ijl/orjson#dataclass),
-[datetime](https://github.com/ijl/orjson#datetime),
-[numpy](https://github.com/ijl/orjson#numpy), and
-[UUID](https://github.com/ijl/orjson#uuid) instances natively.
+[dataclass](https://github.com/timkpaine/xorjson#dataclass),
+[datetime](https://github.com/timkpaine/xorjson#datetime),
+[numpy](https://github.com/timkpaine/xorjson#numpy), and
+[UUID](https://github.com/timkpaine/xorjson#uuid) instances natively.
 
 Its features and drawbacks compared to other Python JSON libraries:
 
@@ -42,37 +42,37 @@ breaking change.
 
 orjson is licensed under both the Apache 2.0 and MIT licenses. The
 repository and issue tracker is
-[github.com/ijl/orjson](https://github.com/ijl/orjson), and patches may be
+[github.com/timkpaine/xorjson](https://github.com/timkpaine/xorjson), and patches may be
 submitted there. There is a
-[CHANGELOG](https://github.com/ijl/orjson/blob/master/CHANGELOG.md)
+[CHANGELOG](https://github.com/timkpaine/xorjson/blob/master/CHANGELOG.md)
 available in the repository.
 
-1. [Usage](https://github.com/ijl/orjson#usage)
-    1. [Install](https://github.com/ijl/orjson#install)
-    2. [Quickstart](https://github.com/ijl/orjson#quickstart)
-    3. [Migrating](https://github.com/ijl/orjson#migrating)
-    4. [Serialize](https://github.com/ijl/orjson#serialize)
-        1. [default](https://github.com/ijl/orjson#default)
-        2. [option](https://github.com/ijl/orjson#option)
-        3. [Fragment](https://github.com/ijl/orjson#fragment)
-    5. [Deserialize](https://github.com/ijl/orjson#deserialize)
-2. [Types](https://github.com/ijl/orjson#types)
-    1. [dataclass](https://github.com/ijl/orjson#dataclass)
-    2. [datetime](https://github.com/ijl/orjson#datetime)
-    3. [enum](https://github.com/ijl/orjson#enum)
-    4. [float](https://github.com/ijl/orjson#float)
-    5. [int](https://github.com/ijl/orjson#int)
-    6. [numpy](https://github.com/ijl/orjson#numpy)
-    7. [str](https://github.com/ijl/orjson#str)
-    8. [uuid](https://github.com/ijl/orjson#uuid)
-3. [Testing](https://github.com/ijl/orjson#testing)
-4. [Performance](https://github.com/ijl/orjson#performance)
-    1. [Latency](https://github.com/ijl/orjson#latency)
-    2. [Memory](https://github.com/ijl/orjson#memory)
-    3. [Reproducing](https://github.com/ijl/orjson#reproducing)
-5. [Questions](https://github.com/ijl/orjson#questions)
-6. [Packaging](https://github.com/ijl/orjson#packaging)
-7. [License](https://github.com/ijl/orjson#license)
+1. [Usage](https://github.com/timkpaine/xorjson#usage)
+    1. [Install](https://github.com/timkpaine/xorjson#install)
+    2. [Quickstart](https://github.com/timkpaine/xorjson#quickstart)
+    3. [Migrating](https://github.com/timkpaine/xorjson#migrating)
+    4. [Serialize](https://github.com/timkpaine/xorjson#serialize)
+        1. [default](https://github.com/timkpaine/xorjson#default)
+        2. [option](https://github.com/timkpaine/xorjson#option)
+        3. [Fragment](https://github.com/timkpaine/xorjson#fragment)
+    5. [Deserialize](https://github.com/timkpaine/xorjson#deserialize)
+2. [Types](https://github.com/timkpaine/xorjson#types)
+    1. [dataclass](https://github.com/timkpaine/xorjson#dataclass)
+    2. [datetime](https://github.com/timkpaine/xorjson#datetime)
+    3. [enum](https://github.com/timkpaine/xorjson#enum)
+    4. [float](https://github.com/timkpaine/xorjson#float)
+    5. [int](https://github.com/timkpaine/xorjson#int)
+    6. [numpy](https://github.com/timkpaine/xorjson#numpy)
+    7. [str](https://github.com/timkpaine/xorjson#str)
+    8. [uuid](https://github.com/timkpaine/xorjson#uuid)
+3. [Testing](https://github.com/timkpaine/xorjson#testing)
+4. [Performance](https://github.com/timkpaine/xorjson#performance)
+    1. [Latency](https://github.com/timkpaine/xorjson#latency)
+    2. [Memory](https://github.com/timkpaine/xorjson#memory)
+    3. [Reproducing](https://github.com/timkpaine/xorjson#reproducing)
+5. [Questions](https://github.com/timkpaine/xorjson#questions)
+6. [Packaging](https://github.com/timkpaine/xorjson#packaging)
+7. [License](https://github.com/timkpaine/xorjson#license)
 
 ## Usage
 
@@ -85,7 +85,7 @@ pip install --upgrade "pip>=20.3" # manylinux_x_y, universal2 wheel support
 pip install --upgrade orjson
 ```
 
-To build a wheel, see [packaging](https://github.com/ijl/orjson#packaging).
+To build a wheel, see [packaging](https://github.com/timkpaine/xorjson#packaging).
 
 ### Quickstart
 
@@ -155,7 +155,7 @@ The global interpreter lock (GIL) is held for the duration of the call.
 It raises `JSONEncodeError` on an unsupported type. This exception message
 describes the invalid object with the error message
 `Type is not JSON serializable: ...`. To fix this, specify
-[default](https://github.com/ijl/orjson#default).
+[default](https://github.com/timkpaine/xorjson#default).
 
 It raises `JSONEncodeError` on a `str` that contains invalid UTF-8.
 
@@ -496,18 +496,18 @@ OPT_NON_STR_KEYS.
 
 This is deprecated and has no effect in version 3. In version 2 this was
 required to serialize  `dataclasses.dataclass` instances. For more, see
-[dataclass](https://github.com/ijl/orjson#dataclass).
+[dataclass](https://github.com/timkpaine/xorjson#dataclass).
 
 ##### OPT_SERIALIZE_NUMPY
 
 Serialize `numpy.ndarray` instances. For more, see
-[numpy](https://github.com/ijl/orjson#numpy).
+[numpy](https://github.com/timkpaine/xorjson#numpy).
 
 ##### OPT_SERIALIZE_UUID
 
 This is deprecated and has no effect in version 3. In version 2 this was
 required to serialize `uuid.UUID` instances. For more, see
-[UUID](https://github.com/ijl/orjson#UUID).
+[UUID](https://github.com/timkpaine/xorjson#UUID).
 
 ##### OPT_SORT_KEYS
 
@@ -554,7 +554,7 @@ simplejson, and ujson.
 ##### OPT_STRICT_INTEGER
 
 Enforce 53-bit limit on integers. The limit is otherwise 64 bits, the same as
-the Python standard library. For more, see [int](https://github.com/ijl/orjson#int).
+the Python standard library. For more, see [int](https://github.com/timkpaine/xorjson#int).
 
 ##### OPT_UTC_Z
 
